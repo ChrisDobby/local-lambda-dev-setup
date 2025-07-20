@@ -1,8 +1,7 @@
 {
   "exec": "cdklocal deploy --require-approval never",
   "watch": [
-    "lib",
-    "functions"
+    "lib"
   ],
   "ext": "ts"
 }

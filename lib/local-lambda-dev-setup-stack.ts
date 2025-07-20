@@ -1,4 +1,5 @@
 import * as cdk from "aws-cdk-lib";
+import { Code, Function } from "aws-cdk-lib/aws-lambda";
 import { SqsEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
 import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
 import { Bucket } from "aws-cdk-lib/aws-s3";
@@ -37,5 +38,22 @@ export class LocalLambdaDevSetupStack extends cdk.Stack {
       })
     );
     sqs.grantConsumeMessages(lambda);
+
+    const hotReloadedLambda = new Function(this, "test-hot-reload", {
+      runtime: cdk.aws_lambda.Runtime.NODEJS_22_X,
+      functionName: "test-hot-reload",
+      handler: "index.handler",
+      code: Code.fromBucket(
+        Bucket.fromBucketName(this, "hot-reload", "hot-reload"),
+        "/Users/chrisdobby/repos/localstack-automated-starter copy/functions/test/dist"
+      ),
+    });
+
+    hotReloadedLambda.addEventSource(
+      new SqsEventSource(sqs, {
+        batchSize: 10,
+      })
+    );
+    sqs.grantConsumeMessages(hotReloadedLambda);
   }
 }

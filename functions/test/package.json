@@ -2,7 +2,8 @@
   "name": "test-function",
   "version": "0.1.0",
   "scripts": {
-    "build": "esbuild --bundle src/index.ts --outfile=dist/index.js --platform=node --external:@aws-sdk/client-s3"
+    "build": "esbuild --bundle src/index.ts --outfile=dist/index.js --platform=node --external:@aws-sdk/client-s3",
+    "watch": "nodemon"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.147",
